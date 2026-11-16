@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+    <div>
+        <h2 class="text-2xl font-bold text-stone-900">Agenda Principal</h2>
+        <p class="text-sm text-stone-600">Planificación de ocupación y reservas</p>
+    </div>
+    <button hx-get="{% url 'crear_reserva' %}"
+            hx-target="#modal-container" 
+            class="bg-emerald-700 hover:bg-emerald-800 text-white font-medium px-4 py-2 rounded-lg shadow-sm transition">
+        + Nueva Reserva
+    </button>
+</div>
+
+<div id="contenido-agenda" hx-trigger="reservaActualizada from:body" hx-get="{% url 'calendario_anual_actual' %}" hx-target="#calendario-container">
+    {% include 'mostrar_reservas/tabla_y_calendario.html' %}
+</div>
+
+{% endblock %}

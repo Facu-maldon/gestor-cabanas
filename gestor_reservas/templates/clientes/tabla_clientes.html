@@ -1,0 +1,47 @@
+<div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="bg-stone-50 border-b border-stone-200 text-xs uppercase text-stone-500 font-semibold">
+                <th class="py-3 px-4">Nombre</th>
+                <th class="py-3 px-4">Teléfono</th>
+                <th class="py-3 px-4">Email</th>
+                <th class="py-3 px-4 text-center">Reservas</th>
+                <th class="py-3 px-4 text-right">Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 text-sm text-stone-700">
+            {% for cliente in clientes %}
+                <tr class="hover:bg-stone-50 transition-colors">
+                    <td class="py-3 px-4 font-medium text-stone-900">{{ cliente.nombre }} {{ cliente.apellido }}</td>
+                    <td class="py-3 px-4">{{ cliente.telefono|default:"-" }}</td>
+                    <td class="py-3 px-4">{{ cliente.email|default:"-" }}</td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-stone-100 text-stone-700">
+                            {{ cliente.total_reservas }}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-right space-x-2">
+                        <button hx-get="{% url 'modificar_cliente' cliente.pk %}"
+                                hx-target="#modal-cliente-container"
+                                onclick="abrirModal()"
+                                class="px-2.5 py-1 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition">
+                            Editar
+                        </button>
+                        <button hx-get="{% url 'eliminar_cliente' cliente.pk %}"
+                                hx-target="#modal-cliente-container"
+                                onclick="abrirModal()"
+                                class="px-2.5 py-1 text-xs font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-md transition">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="py-8 text-center text-stone-400">
+                        No se encontraron clientes registrados.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

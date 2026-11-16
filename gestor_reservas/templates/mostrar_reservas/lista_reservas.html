@@ -1,0 +1,29 @@
+            {% for r in reservas %}
+                <div class="p-3 rounded-lg border border-stone-200 bg-stone-50 flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="w-2.5 h-2.5 rounded-full {% if r.cabana.color == 'verde' %}bg-emerald-500{% else %}bg-pink-500{% endif %}"></span>
+                            <span class="font-bold text-sm text-stone-900">{{ r.cliente.nombre }} {{ r.cliente.apellido }} </span>
+                        </div>
+                        <p class="text-xs text-stone-600">{{ r.cabana.nombre }}</p>
+                        <p class="text-xs font-medium text-stone-500 mt-1">
+                            📅 {{ r.fecha_inicio|date:"d/m" }} - {{ r.fecha_fin|date:"d/m/Y" }}
+                        </p>
+                    </div>
+                    <div>
+                        <button hx-get="{% url 'eliminar_reserva' r.pk %}"
+                            class="text-stone-400 hover:text-red-600 text-xs font-bold px-2 py-1"
+                            hx-target="#modal-container">
+                        ✕
+                        </button>
+                        <button hx-get="{% url 'modificar_reserva' r.pk %}"
+                                hx-target="#modal-container"
+                                class="text-stone-400 hover:text-red-600 text-xs font-bold px-2 py-1">
+                            ✎
+                        </button>
+                    </div>
+                    
+                </div>
+            {% empty %}
+                <p class="text-stone-400 text-sm italic text-center py-4">No hay reservas registradas.</p>
+            {% endfor %}

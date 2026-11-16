@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Cabañas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body class="bg-stone-100 text-stone-800 min-h-screen">
+    
+    <nav class="bg-white border-b border-stone-200 px-6 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo o título del sistema -->
+            <a href="/" class="font-bold text-stone-800 text-lg" hx-target="">
+                Gestor de Reservas
+            </a>
+
+            <!-- Enlaces de navegación -->
+            <div class="flex items-center gap-2">
+                <a href="/"
+                class="px-3 py-1.5 rounded-lg text-sm font-medium transition
+                        {% if request.resolver_match.url_name != 'lista_clientes' %} bg-emerald-50 text-emerald-700 {% else %} text-stone-600 hover:bg-stone-100 {% endif %}">
+                    Calendario
+                </a>
+
+                <a href="{% url 'lista_clientes' %}"
+                class="px-3 py-1.5 rounded-lg text-sm font-medium transition
+                        {% if request.resolver_match.url_name == 'lista_clientes' %} bg-emerald-50 text-emerald-700 {% else %} text-stone-600 hover:bg-stone-100 {% endif %}">
+                    Clientes
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-4 md:p-6">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Contenedor para Modal HTMX -->
+    <div id="modal-container"></div>
+    <div id="modal-cliente-container" class=""></div>
+
+    <script>
+        // Cerrar modal automáticamente cuando HTMX avise que se guardó la reserva
+        document.body.addEventListener('reservaActualizada', function() {
+            document.getElementById('modal-container').innerHTML = '';
+        });
+    </script>
+
+    <script>
+            function cerrarModal() {
+        document.getElementById('modal-cliente-container').innerHTML=''
+        }
+
+        document.body.addEventListener('clienteActualizado', function () {
+            cerrarModal();
+        });
+    </script>
+</body>
+</html>

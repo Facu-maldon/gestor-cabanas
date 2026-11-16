@@ -1,0 +1,67 @@
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for m in meses %}
+    <button type="button" hx-get="{% url 'calendario_mensual_detallado' year m.numero %}"
+                hx-target="#calendario-container">
+        <div 
+                class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer border border-stone-100 hover:border-emerald-500 group flex flex-col justify-between">
+                
+                <div>
+                    <!-- Título del Mes -->
+                    <h3 class="font-bold text-stone-700 group-hover:text-emerald-600 mb-2 text-md">
+                        {{ m.nombre }}
+                    </h3>
+
+                    <!-- Cabecera de días de la semana -->
+                    <div class="grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold text-stone-400 mb-1">
+                        <span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span>
+                    </div>
+
+                    <!-- Matriz miniatura de días -->
+                    <div class="grid grid-cols-7 gap-0.5 text-center text-[11px]">
+                        {% for semana in m.semanas %}
+                            {% for dia in semana %}
+                                {% if dia.is_empty %}
+                                    <div class="h-5"></div>
+                                {% else %}
+                                    <div class="h-5 relative flex flex-col items-center justify-center rounded-sm font-medium bg-stone-50 text-stone-600 hover:bg-stone-100 overflow-hidden">
+                                        
+                                        <!-- Si hay una sola cabaña -->
+                                        {% if dia.num_reservas == 1 %}
+                                            <div class="absolute inset-0 flex items-center justify-center text-white font-bold
+                                                        {% if dia.es_extremo %} text-stone-950 font-extrabold {% else %} text-white font-bold {% endif %}" style="background-color: {{ dia.cabanas.0.color|default:'#10b981' }}">
+                                                {{ dia.day }}
+                                            </div>
+                                        
+                                        <!-- Si hay dos o más cabañas (superposición) -->
+                                        {% elif dia.num_reservas > 1 %}
+                                            <div class="absolute inset-0 flex flex-col">
+                                                <!-- Dividimos el fondo o mostramos puntos indicadores -->
+                                                <div class="h-full w-full flex items-center justify-center text-white font-bold bg-{{ dia.color|default:'#3b82f6' }}">
+                                                    {{ dia.day }}
+                                                </div>
+                                            </div>
+                                            <!-- Mini indicadores de colores abajo -->
+                                            <div class="absolute bottom-0.5 left-0 right-0 flex justify-center gap-0.5 px-0.5 z-10">
+                                                {% for cabana in dia.cabanas %}
+                                                    <span class="w-1.5 h-1.5 rounded-full" style="background-color: {{ cabana.color|default:'#3b82f6' }}"></span>
+                                                {% endfor %}
+                                            </div>
+
+                                        <!-- Si no hay reservas -->
+                                        {% else %}
+                                            <span>{{ dia.day }}</span>
+                                        {% endif %}
+
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <span class="text-[10px] text-stone-400 mt-3 text-right group-hover:text-emerald-600 font-medium">Ampliar mes →</span>
+            </div>
+    </button>
+    
+    {% endfor %}
+</div>

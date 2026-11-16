@@ -1,0 +1,27 @@
+
+<div class="max-w-6xl mx-auto p-6">
+    
+    <!-- HEADER: Navegador de Años -->
+    <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm">
+        <button hx-get="{% url 'calendario_anual' prev_year %}" 
+                hx-target="#calendario-container"
+                class="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-sm font-medium">
+            ← Año Anterior ({{ prev_year }})
+        </button>
+        
+        <h1 class="text-2xl font-bold text-stone-800">{{ year }}</h1>
+        
+        <button hx-get="{% url 'calendario_anual' next_year %}" 
+                hx-target="#calendario-container"
+                class="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-sm font-medium">
+            Año Siguiente ({{ next_year }}) →
+        </button>
+    </div>
+    <div id="calendario-cuadricula-container">
+        {% include 'calendario/calendario_anual_cuadricula.html' %}
+    </div>
+
+    
+    
+
+</div>

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-6">
+    
+    <!-- Encabezado y acciones -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-stone-800">Gestión de Clientes</h1>
+            <p class="text-sm text-stone-500">Administra los huéspedes registrados en el sistema</p>
+        </div>
+
+        <button hx-get="{% url 'crear_cliente' %}"
+                hx-target="#modal-cliente-container"
+                onclick="abrirModal()"
+                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg shadow-xs transition">
+            + Nuevo Cliente
+        </button>
+    </div>
+
+    <!-- Buscador en tiempo real con HTMX -->
+    <div class="mb-4">
+        <input type="text"
+               name="q"
+               value="{{ query }}"
+               placeholder="Buscar por nombre, teléfono o email..."
+               hx-get="{% url 'lista_clientes' %}"
+               hx-trigger="keyup changed delay:300ms, search"
+               hx-target="#tabla-clientes-container"
+               class="w-full sm:w-80 px-3.5 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+    </div>
+
+    <!-- Contenedor que se refresca automáticamente al crear, editar o borrar -->
+    <div id="tabla-clientes-container"
+         hx-get="{% url 'lista_clientes' %}"
+         hx-trigger="clienteActualizado from:body"
+         hx-include="[name='q']">
+        {% include 'clientes/tabla_clientes.html' %}
+    </div>
+
+</div>
+{% endblock %}
