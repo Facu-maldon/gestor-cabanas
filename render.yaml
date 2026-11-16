@@ -1,20 +1,20 @@
 databases:
-  - name: mysitedb
+  - name: gestor_reservasdb
     plan: free
-    databaseName: mysite
-    user: mysite
+    databaseName: gestor_reservas
+    user: gestor_reservas
 
 services:
   - type: web
     plan: free
-    name: mysite
+    name: gestor_reservas
     runtime: python
     buildCommand: './build.sh'
-    startCommand: 'python -m gunicorn mysite.asgi:application -k uvicorn.workers.UvicornWorker'
+    startCommand: 'python -m gunicorn gestor_reservas.asgi:application -k uvicorn.workers.UvicornWorker'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: mysitedb
+          name: gestor_reservasdb
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
