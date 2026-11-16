@@ -1,20 +1,20 @@
 databases:
-  - name: gestor-cabanasdb
+  - name: gestorcabanasdb
     plan: free
-    databaseName: gestor-cabanas
-    user: gestor-cabanas
+    databaseName: gestorcabanas
+    user: gestorcabanas
 
 services:
   - type: web
     plan: free
-    name: gestor-cabanas
+    name: gestorcabanas
     runtime: python
     buildCommand: './build.sh'
     startCommand: 'python -m gunicorn gestor-reservas.asgi:application -k uvicorn.workers.UvicornWorker'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: gestor-cabanasdb
+          name: gestorcabanasdb
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
